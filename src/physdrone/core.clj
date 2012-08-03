@@ -2,11 +2,10 @@
   (:use [overtone.live])
   (:require [quil.core :as q]))
 
-(definst ping [freq 440 dur 3 vel 1]
-  (let [env (env-gen (envelope [1 0.0001] [dur] :exponential) :action FREE)]
-    (* (sin-osc freq)
-       env
-       vel)))
+(definst ping [freq 440 dur 3 vel 1 pan 0.5]
+  (let [env (env-gen (envelope [1 0.0001] [dur] :exponential) :action FREE)
+        sig (* (sin-osc freq) env vel)]
+    [(* (- 1 pan) sig) (* pan sig)]))
 
 (defn clip-in [m v]
   (let [pm m
@@ -46,7 +45,7 @@
     (if (neg? (* py (+ vy py)))
       (do
         (add-ring px py)
-        (ping (* 4 px) 3 (* 0.1 vy))))
+        (ping (* 4 px) 3 (* 0.1 vy) (/ px 300))))
 
     {:pos [(+ vx px) (+ vy py)]
      :vel [vx vy]}))
