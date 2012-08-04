@@ -20,7 +20,7 @@
 
 (defn grav-v [{[px py] :pos [vx vy] :vel} [gx gy] g]
   (let [d (+ (* (- gx px) (- gx px)) (* (- gy py) (- gy py)))
-        f (clip-in 0.8 (/ g d))
+        f (clip-in 1 (/ g d))
         alpha (Math/atan2 (- py gy) (- px gy))
         max-f 10
         fx (clip-in max-f (* f (Math/cos alpha)))
@@ -53,7 +53,7 @@
     (if(neg? (* py (+ vy py)))
       (do
         (add-ring px py)
-        (ping (* 4 px) 3 (* 0.1 vy) 0.9)))
+        (ping (* 4 px) 3 (* 0.1 vy) (/ px 300))))
 
     {:pos [(+ vx px) (+ vy py)]
      :vel [vx vy]}))
