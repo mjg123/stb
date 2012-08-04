@@ -1,4 +1,4 @@
-(ns physdrone.core
+(ns stb.orbits
   (:use [overtone.live])
   (:require [quil.core :as q]))
 
@@ -46,11 +46,9 @@
         vy (- vy vgy)
 
         vx (if (< 290 (Math/abs (+ px vx))) (- vx) vx)
-        vy (if (< 290 (Math/abs (+ py vy))) (- vy) vy)
+        vy (if (< 290 (Math/abs (+ py vy))) (- vy) vy)]
 
-        [vx vy] [(clip-in 10 vx) (clip-in 10 vy)]]
-
-    (if(neg? (* py (+ vy py)))
+    (if (neg? (* py (+ vy py)))
       (do
         (add-ring px py)
         (ping (* 4 px) 3 (* 0.1 vy) (/ px 300))))
@@ -102,14 +100,15 @@
                (q/ellipse (+ 300 x) (+ 300 y) r r)
                (reset! ring-atom [x y (+ 2 r)]))))))
 
+(defn start []
+  (q/defsketch orbits-sketch
+    :title "orbits"
+    :setup  setup
+    :draw draw
+    :size [600 600]
+    :renderer :opengl
+    :target :perm-frame))
 
-
-
-
-(q/defsketch sketch-name
-  :title "physdrone"
-  :setup  setup
-  :draw draw
-  :size [600 600]
-  :renderer :opengl
-  :target :perm-frame)
+(defn -main [& args]
+  (println "let's go!")
+  (start))
